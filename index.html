@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <title>إدارة المهام</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <!-- iOS support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="إدارة المهام">
+</head>
+<body>
+    <div class="container">
+        <div id="install-prompt" class="install-prompt" style="display: none;">
+            <p>هل تريد تثبيت التطبيق على هاتفك؟</p>
+            <div class="install-buttons">
+                <button id="install-button" class="install-btn">تثبيت</button>
+                <button onclick="closeInstallPrompt()" class="cancel-btn">لاحقاً</button>
+            </div>
+        </div>
+        <div id="auth-container">
+            <div class="auth-form" id="login-form">
+                <h2>تسجيل الدخول</h2>
+                <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+                <input type="password" id="login-password" placeholder="كلمة المرور">
+                <button onclick="login()">دخول</button>
+                <p>ليس لديك حساب؟ <a href="#" onclick="toggleAuth()">سجل الآن</a></p>
+            </div>
+            <div class="auth-form" id="register-form" style="display: none;">
+                <h2>إنشاء حساب جديد</h2>
+                <input type="text" id="register-name" placeholder="الاسم">
+                <input type="email" id="register-email" placeholder="البريد الإلكتروني">
+                <input type="password" id="register-password" placeholder="كلمة المرور">
+                <button onclick="register()">تسجيل</button>
+                <p>لديك حساب بالفعل؟ <a href="#" onclick="toggleAuth()">سجل دخول</a></p>
+            </div>
+        </div>
+
+        <div id="task-container" style="display: none;">
+            <header>
+                <h1>إدارة المهام</h1>
+                <div class="user-profile">
+                    <button onclick="showProfile()" class="profile-btn">
+                        <i class="fas fa-user"></i>
+                        <span id="user-name-display"></span>
+                    </button>
+                    <button onclick="logout()" class="logout-btn">تسجيل خروج</button>
+                </div>
+            </header>
+
+            <!-- Profile Modal -->
+            <div id="profile-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeProfile()">&times;</span>
+                    <h2>الملف الشخصي</h2>
+                    <div class="profile-form">
+                        <div class="profile-picture">
+                            <img id="profile-image" src="https://via.placeholder.com/150" alt="الصورة الشخصية">
+                            <input type="file" id="profile-image-input" accept="image/*" onchange="updateProfileImage()">
+                            <label for="profile-image-input" class="upload-btn">تغيير الصورة</label>
+                        </div>
+                        <div class="profile-info">
+                            <input type="text" id="profile-name" placeholder="الاسم">
+                            <input type="email" id="profile-email" placeholder="البريد الإلكتروني" readonly>
+                            <input type="password" id="profile-current-password" placeholder="كلمة المرور الحالية">
+                            <input type="password" id="profile-new-password" placeholder="كلمة المرور الجديدة">
+                            <button onclick="updateProfile()">حفظ التغييرات</button>
+                        </div>
+                        <div class="profile-stats">
+                            <h3>إحصائيات المهام</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span id="total-tasks">0</span>
+                                    <label>إجمالي المهام</label>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="completed-tasks">0</span>
+                                    <label>المهام المكتملة</label>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="pending-tasks">0</span>
+                                    <label>المهام المعلقة</label>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="overdue-tasks">0</span>
+                                    <label>المهام المتأخرة</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-task-container">
+                <h2>إضافة مهمة جديدة</h2>
+                <div class="task-form">
+                    <input type="text" id="task-title" placeholder="عنوان المهمة">
+                    <textarea id="task-description" placeholder="وصف المهمة"></textarea>
+                    <input type="datetime-local" id="task-deadline">
+                    <select id="task-priority">
+                        <option value="low">منخفضة</option>
+                        <option value="medium">متوسطة</option>
+                        <option value="high">عالية</option>
+                    </select>
+                    <button onclick="addTask()">إضافة المهمة</button>
+                </div>
+            </div>
+
+            <div class="tasks-list">
+                <h2>المهام الحالية</h2>
+                <div class="task-filters">
+                    <button onclick="filterTasks('all')" class="active">الكل</button>
+                    <button onclick="filterTasks('pending')">قيد التنفيذ</button>
+                    <button onclick="filterTasks('completed')">مكتملة</button>
+                </div>
+                <div id="tasks"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification-badge" class="notification-badge"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
